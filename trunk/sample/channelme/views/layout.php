@@ -27,8 +27,18 @@
 				<? if ( $user_id ) { ?>
 					<h3>My channels</h3>
 					<ul>
-						<li><a href="#body:channel&id=1">PHP</a></li>
+						<? foreach ( $channels as $id ) { ?>
+							<? # $channel = channel_peer::instance()->get_by_id( $id ) ?>
+							<li><a href="#body:channel&id=<?=$id?>"><?=$channel['title']?></a></li>
+						<? } ?>
 					</ul>
+
+					<label>Create new channel</label><br />
+					<input type="password" class="text span-6" name="password_confirm" />
+
+					<input type="submit" value=" Create " />
+
+					<br /><br/><br/>
 
 					<a href="index.php?action=signout">Sign out</a>
 
