@@ -35,7 +35,7 @@ class php_redis
 	 */
 	public function set( $key, $value )
 	{
-		$value = is_numeric($value) ? $value : serialize($value);
+		$value = $this->pack_value($value);
 		$cmd = array("SET {$key} " . strlen($value), $value);
 
 		$response = $this->execute_command( $cmd );
@@ -58,7 +58,7 @@ class php_redis
 		if ( $length > 0 )
 		{
 			$value = $this->get_response();
-			return is_numeric($value) ? $value : unserialize($value);
+			return $this->unpack_value($value);
 		}
 	}
 
@@ -102,9 +102,10 @@ class php_redis
 	}
 
 	# === List operations ===
+	
 	public function prepend( $key, $value )
 	{
-		$value = is_numeric($value) ? $value : serialize($value);
+		$value = $this->pack_value($value);
 		$cmd = array("LPUSH {$key} " . strlen($value), $value);
 
 		$response = $this->execute_command( $cmd );
@@ -113,7 +114,7 @@ class php_redis
 
 	public function append( $key, $value )
 	{
-		$value = is_numeric($value) ? $value : serialize($value);
+		$value = $this->pack_value($value);
 		$cmd = array("RPUSH {$key} " . strlen($value), $value);
 
 		$response = $this->execute_command( $cmd );
@@ -138,10 +139,51 @@ class php_redis
 		{
 			$length = substr($this->get_response(), 1);
 			$value = $this->get_response();
-			$list[] = is_numeric($value) ? $value : unserialize($value);
+			$list[] = $this->unpack_value($value);
 		}
 
 		return $list;
+	}
+
+	public function get_filtered_list($key, $filters, $limit, $offset = 0)
+	{
+		$start = 0;
+		$end = $this->get_list_length($key);
+
+		$response = $this->execute_command( "LRANGE {$key} {$start} {$end}" );
+		if ( $this->get_error($response) )
+		{
+			return;
+		}
+
+		$limit += $offset;
+
+		$list = array();
+		for ( $i = 0; $i < $end; $i++ )
+		{
+			$length = substr($this->get_response(), 1);
+			$value = $this->get_response();
+			$value = $this->unpack_value( $value );
+			if ( ( $filters == array_intersect($value, $filters) ) && ( ++$added <= $limit ) )
+			{
+				$list[] = $value;
+			}
+		}
+
+		$list = array_slice($list, $offset);
+
+		return $list;
+	}
+
+	public function get_list_length($key)
+	{
+		$response = $this->execute_command( "LLEN {$key}" );
+		if ( $this->get_error($response) )
+		{
+			return;
+		}
+
+		return (int)substr($response, 1);
 	}
 
 	# === Middle tier ===
@@ -163,6 +205,28 @@ class php_redis
 
 		return $this->handle;
     }
+
+	private function pack_value( $value )
+	{
+		if ( is_numeric($value) )
+		{
+			return $value;
+		}
+		else
+		{
+			return serialize($value);
+		}
+	}
+
+	private function unpack_value( $packed )
+	{
+		if ( is_numeric($packed) )
+		{
+			return $packed;
+		}
+
+		return unserialize($packed);
+	}
 
 	private function execute_command( $commands )
 	{

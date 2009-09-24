@@ -1,5 +1,8 @@
 <?
 
+/**
+ * Peer class used for entity saving without any list functionality
+ */
 class redis_peer
 {
 	protected $name_space;

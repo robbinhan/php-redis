@@ -25,7 +25,7 @@ test::assert_true( $v == array(2, 1) );
 
 $r->set('test', null);
 $v = $r->get('test');
-test::assert_true( $v == null );
+test::assert_null( $v );
 $v = $r->exists('test');
 test::assert_true( $v );
 
@@ -73,7 +73,7 @@ $r->append('test', 'a');
 $r->append('test', 'b');
 $r->append('test', 'c');
 $v = $r->get_list('test', 3);
-test::assert_value( $v, array('a', 'b', 'c') );
+test::assert_value( $v, array('a', 'b', 'c'), 'Lists' );
 
 $r->append('test', 'd');
 $v = $r->get_list('test', 4);
@@ -86,5 +86,16 @@ $v = $r->get_list('test', 2, 1);
 test::assert_value( $v, array('b', 'c') );
 $v = $r->get_list('test', 10, 1);
 test::assert_value( $v, array('b', 'c', 'd') );
+
+$v = $r->get_list_length('test');
+test::assert_value( $v, 4 );
+
+$r->delete('test1');
+$v = $r->get_list_length('test1');
+test::assert_value( $v, 0 );
+
+$v = $r->append('test1', 1);
+$v = $r->get_list_length('test1');
+test::assert_value( $v, 1 );
 
 test::summary();
