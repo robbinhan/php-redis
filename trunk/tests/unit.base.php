@@ -1,6 +1,6 @@
 <?
 
-require_once dirname(__FILE__) . '/../lib/php-redis.php';
+require_once dirname(__FILE__) . '/../lib/redis.php';
 require_once dirname(__FILE__) . '/test.lib.php';
 
 # Config
