@@ -1,0 +1,1 @@
+<? $hidden = true; include '_post.php' ?>
