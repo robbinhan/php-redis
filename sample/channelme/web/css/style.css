@@ -4,3 +4,14 @@ body { background: #002233; font-size: 14px; }
 #header h1  { color: #FFF; margin-bottom: 0px; }
 
 fieldset    { border: 1px solid #fff; }
+.hidden { display: none; }
+
+li.selected { font-weight: bold; }
+
+form.broadcast textarea { width: 400px; height: 60px; font-size: 18px; float: left; margin: 0px; }
+form.broadcast input { width: 130px; height: 70px; font-size: 18px; float: right; }
+
+#posts { margin-left: 0px; }
+#posts li { list-style: none; margin: 0px 0px 10px 0px; padding: 0px; clear: both; }
+#posts li .meta { float: left; width: 75px; font-size: 11px; }
+#posts li .body { display:block; margin-left: 80px; }
