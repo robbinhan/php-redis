@@ -1,7 +1,7 @@
 body { background: #002233; font-size: 14px; }
 .main { background: #C0DEED; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding: 10px 0px; }
 #header { padding-top: 20px; }
-#header h1  { color: #FFF; margin-bottom: 0px; }
+#header h1 a { color: #FFF; margin-bottom: 0px; text-decoration: none; }
 
 fieldset    { border: 1px solid #fff; }
 .hidden { display: none; }
@@ -14,4 +14,4 @@ form.broadcast input { width: 130px; height: 70px; font-size: 18px; float: right
 #posts { margin-left: 0px; }
 #posts li { list-style: none; margin: 0px 0px 10px 0px; padding: 0px; clear: both; }
 #posts li .meta { float: left; width: 75px; font-size: 11px; }
-#posts li .body { display:block; margin-left: 80px; }
+#posts li .body { display:block; margin-left: 80px; margin-bottom: 20px; }

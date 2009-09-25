@@ -11,8 +11,10 @@ require_once dirname(__FILE__) . '/../config/app.php';
 require_once dirname(__FILE__) . '/../lib/model/user.peer.php';
 require_once dirname(__FILE__) . '/../lib/model/channel.peer.php';
 require_once dirname(__FILE__) . '/../lib/model/post.peer.php';
+require_once dirname(__FILE__) . '/../lib/model/user_post.peer.php';
 require_once dirname(__FILE__) . '/../lib/model/channel_post.peer.php';
 require_once dirname(__FILE__) . '/../lib/model/user_channel.peer.php';
+require_once dirname(__FILE__) . '/../lib/model/channel_user.peer.php';
 require_once dirname(__FILE__) . '/../lib/helper/post.helper.php';
 
 # Redis init

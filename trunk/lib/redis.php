@@ -145,7 +145,7 @@ class php_redis
 		return $list;
 	}
 
-	public function get_filtered_list($key, $filters, $limit, $offset = 0)
+	public function get_filtered_list($key, $filters, $limit = 0, $offset = 0)
 	{
 		$start = 0;
 		$end = $this->get_list_length($key);
@@ -156,7 +156,7 @@ class php_redis
 			return;
 		}
 
-		$limit += $offset;
+		$limit = !$limit ? $end : $limit + $offset;
 
 		$list = array();
 		for ( $i = 0; $i < $end; $i++ )
@@ -184,6 +184,45 @@ class php_redis
 		}
 
 		return (int)substr($response, 1);
+	}
+
+	public function remove_from_list($key, $value, $count = 0)
+	{
+		$value = $this->pack_value($value);
+		$response = $this->execute_command( array("LREM {$key} {$count} " . strlen($value), $value) );
+
+		if ( $this->get_error($response) )
+		{
+			return;
+		}
+
+		return (int)substr($response, 1);
+	}
+
+	public function remove_by_filter($key, $filters)
+	{
+		$list = $this->get_filtered_list($key, $filters);
+		
+		foreach ( $list as $item )
+		{
+			$this->remove_from_list($key, $item);
+		}
+	}
+
+	public function truncate_list($key, $limit, $offset = 0)
+	{
+		$limit--;
+		$start = $offset;
+		$end = $start + $limit;
+
+		$response = $this->execute_command( "LTRIM {$key} {$start} {$end}" );
+
+		if ( $this->get_error($response) )
+		{
+			return;
+		}
+
+		return true;
 	}
 
 	# === Middle tier ===
