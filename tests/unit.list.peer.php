@@ -22,6 +22,7 @@ $p->insert('list', array('id' => 4, 'type' => 'video'));
 $v = $p->get_list('list');
 
 test::assert_value(count($v), 4, 'Adding, reading');
+test::assert_value($p->length('list'), 4);
 test::assert_value($v[1]['id'], 2);
 test::assert_value($v[3]['type'], 'video');
 
@@ -59,6 +60,7 @@ $p->insert('list', array('id' => 7, 'type' => 'text', 'section' => 'blogs'));
 
 $v = $p->get_list('list', array('type' => 'image'));
 
+test::assert_value($p->length('list'), 7);
 test::assert_value(count($v), 2, 'Filtering');
 test::assert_value($v[0]['id'], 1);
 test::assert_value($v[0]['type'], 'image');
@@ -87,5 +89,34 @@ test::assert_value($v[1]['id'], 7);
 
 $v = $p->get_list('list', array('type' => 'text', 'section' => 'songs'));
 test::assert_value(count($v), 0	);
+
+$p->delete('list', array('section' => 'blogs'));
+$v = $p->get_list('list');
+test::assert_value(count($v), 5, 'Deleting' );
+$v = $p->get_list('list', array('section' => 'blogs'));
+test::assert_value(count($v), 0	);
+
+$p->delete('list', array('type' => 'text'));
+$v = $p->get_list('list');
+test::assert_value(count($v), 4	);
+$v = $p->get_list('list', array('type' => 'text'));
+test::assert_value(count($v), 0	);
+
+$p->clear('list');
+$p->insert('list', array('id' => 1, 'type' => 'image'));
+$p->insert('list', array('id' => 2, 'type' => 'text', 'section' => 'blogs'));
+$p->insert('list', array('id' => 3, 'type' => 'video'));
+$p->insert('list', array('id' => 4, 'type' => 'video'));
+$p->insert('list', array('id' => 5, 'type' => 'image'));
+$p->insert('list', array('id' => 6, 'type' => 'text', 'section' => 'jokes'));
+$p->insert('list', array('id' => 7, 'type' => 'text', 'section' => 'blogs'));
+$v = $p->get_list('list');
+test::assert_value(count($v), 7, 'Truncating' );
+
+$p->truncate('list', 5, 1);
+$v = $p->get_list('list');
+test::assert_value(count($v), 5 );
+test::assert_value($v[0]['id'], 2 );
+test::assert_value($v[4]['id'], 6 );
 
 test::summary();

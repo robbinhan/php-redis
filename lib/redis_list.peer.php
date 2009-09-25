@@ -32,14 +32,24 @@ class redis_list_peer
 		}
 	}
 
+	public function length( $pk )
+	{
+		return $this->get_connection()->get_list_length($this->name_space . $pk);
+	}
+
 	public function clear( $pk )
 	{
 		$this->get_connection()->delete($this->name_space . $pk);
 	}
 
-	public function truncate( $pk, $limit, $offset )
+	public function delete( $pk, $params )
 	{
-		# $this->get_connection()->truncate($this->name_space . $pk, $limit, $offset);
+		$this->get_connection()->remove_by_filter($this->name_space . $pk, $params);
+	}
+
+	public function truncate( $pk, $limit, $offset = 0 )
+	{
+		$this->get_connection()->truncate_list($this->name_space . $pk, $limit, $offset);
 	}
 
 	public function get_list( $pk, $params = array(), $limit = null, $offset = 0 )

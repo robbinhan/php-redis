@@ -16,19 +16,21 @@ var App = {
 
 	initLinks: function()
 	{
-		$('a').bind('click', function(){ App.loadUrl( $(this).attr('href') ); });
+		$('a[forced!=1]').bind('click', function(){ App.loadUrl( $(this).attr('href') ); });
+		$('a').attr('forced', 1);
 	},
 
 	loadUrl: function( ancor )
 	{
 		var container = ancor.substr(0, ancor.indexOf(':'));
 		var url = 'index.php?action=' + ancor.substr(ancor.indexOf(':') + 1);
-		$.get( url, function( r ) { $(container).html(r); App.initForms(); } );
+		$.get( url, function( r ) { $(container).html(r); App.initLinks(); App.initForms(); } );
 	},
 
 	initForms: function()
 	{
-		$('form').bind('submit', function(){ App.submitForm( $(this) ); return false; });
+		$('form[forced!=1]').bind('submit', function(){ App.submitForm( $(this) ); return false; });
+		$('form').attr('forced', 1);
 	},
 
 	submitForm: function( form )
@@ -107,6 +109,15 @@ var App = {
 			$('#c' + r.id).fadeIn( 150 );
 			$('#join_pane').hide();
 			$('#post').show();
+		}, 'json' );
+	},
+
+	leaveChannel: function( id )
+	{
+		$.post( 'index.php?action=leave_channel', {id: id}, function( r ) {
+			$('#c' + id).fadeOut( 150 );
+			$('#join_pane').show();
+			$('#post').hide();
 		}, 'json' );
 	}
 }

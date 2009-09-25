@@ -16,7 +16,7 @@
 	<body>
 		<div class="container">
 			<div id="header" class="span-24 last">
-				<h1>ChannelMe</h1>
+				<h1><a href="/">ChannelMe</a></h1>
 			</div>
 		</div>
 
