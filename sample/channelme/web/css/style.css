@@ -1,4 +1,4 @@
-body { background: #002233; font-size: 14px; }
+body { background: #002233; font-size: 14px; overflow: scroll; }
 .main { background: #C0DEED; -moz-border-radius: 5px; -webkit-border-radius: 5px; padding: 10px 0px; }
 #header { padding-top: 20px; }
 #header h1 a { color: #FFF; margin-bottom: 0px; text-decoration: none; }

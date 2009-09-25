@@ -81,6 +81,8 @@ var App = {
 		$('#add_channel > input.text').val('');
 		$('#my_channels_list').prepend( App.renderChannel(r) );
 		$('#c' + r.id).fadeIn( 150 );
+
+		App.initLinks();
 	},
 
 	renderChannel: function( data )
@@ -94,6 +96,8 @@ var App = {
 		$('#posts').prepend(r);
 		$('#posts > li.hidden').show(150);
 		$('#post > textarea').val('');
+
+		App.initLinks();
 	},
 
 	channelSelect: function( ob )
@@ -109,6 +113,8 @@ var App = {
 			$('#c' + r.id).fadeIn( 150 );
 			$('#join_pane').hide();
 			$('#post').show();
+
+			App.initLinks();
 		}, 'json' );
 	},
 

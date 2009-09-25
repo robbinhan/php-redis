@@ -21,7 +21,7 @@
 		</div>
 
 		<div class="container main">
-			<div class="span-14 append-1 prepend-1" id="body"></div>
+			<div class="span-14 append-1 prepend-1" id="body">Just a second...</div>
 
 			<div class="span-7 append-1 last">
 				<? if ( $user_id ) { ?>
