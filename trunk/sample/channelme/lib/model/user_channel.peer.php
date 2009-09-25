@@ -14,7 +14,7 @@ class user_channel_peer extends redis_list_peer
 
 	public function insert( $user_id, $channel_id )
 	{
-		parent::insert($user_id, array('id' => $channel_id));
+		parent::insert($user_id, array('id' => $channel_id), false);
 		channel_user_peer::instance()->insert($channel_id, $user_id);
 	}
 

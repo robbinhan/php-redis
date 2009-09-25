@@ -17,6 +17,9 @@ class channel_post_peer extends redis_list_peer
 		parent::insert($channel_id, array('id' => $post_id), false);
 		$this->truncate($channel_id, 100);
 
+		parent::insert(0, array('id' => $post_id), false);
+		$this->truncate(0, 100);
+
 		$users = channel_user_peer::instance()->get_list($channel_id);
 		foreach ( $users as $data )
 		{
