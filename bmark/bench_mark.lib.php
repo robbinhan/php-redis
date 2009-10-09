@@ -4,14 +4,19 @@ class bench_mark
 {
 	private static $checkpoint;
 
-	public static function start()
+	public static function start( $note = '' )
 	{
 		self::$checkpoint = microtime(true);
+
+		if ( $note )
+		{
+			echo $note . '...';
+		}
 	}
 
-	public static function get()
+	public static function stop()
 	{
 		$spent = microtime(true) - self::$checkpoint;
-		return round($checkpoint, 2);
+		echo ' ' . number_format($spent, 2) . 's' . "\n";
 	}
 }

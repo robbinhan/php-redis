@@ -15,9 +15,9 @@ class mock_set_peer extends redis_set_peer
 $p = new mock_set_peer();
 
 $p->clear('some_set');
-$p->add('some_set', 1, 'Adding/removing');
+$p->add('some_set', 1);
 $p->add('some_set', 2);
-test::assert_true($p->is_member('some_set', 1));
+test::assert_true($p->is_member('some_set', 1), 'Adding/removing');
 test::assert_true($p->is_member('some_set', 2));
 test::assert_false($p->is_member('some_set', 3));
 test::assert_value($p->get_count('some_set'), 2);
