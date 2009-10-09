@@ -225,6 +225,66 @@ class php_redis
 		return true;
 	}
 
+	# === Set operations ===
+
+	public function add_member( $key, $value )
+	{
+		$value = $this->pack_value($value);
+		$cmd = array("SADD {$key} " . strlen($value), $value);
+
+		$response = $this->execute_command( $cmd );
+		return $response == ':1';
+	}
+
+	public function remove_member( $key, $value )
+	{
+		$value = $this->pack_value($value);
+		$cmd = array("SREM {$key} " . strlen($value), $value);
+
+		$response = $this->execute_command( $cmd );
+		return $response == ':1';
+	}
+
+	public function is_member( $key, $value )
+	{
+		$value = $this->pack_value($value);
+		$cmd = array("SISMEMBER {$key} " . strlen($value), $value);
+
+		$response = $this->execute_command( $cmd );
+		return $response == ':1';
+	}
+
+	public function get_members($key)
+	{
+		$response = $this->execute_command( "SMEMBERS {$key}" );
+		if ( $this->get_error($response) )
+		{
+			return;
+		}
+
+		$count = (int)substr($response, 1);
+		$list = array();
+		for ( $i = 0; $i < $count; $i++ )
+		{
+			$length = substr($this->get_response(), 1);
+			$value = $this->get_response();
+			$list[] = $this->unpack_value($value);
+		}
+
+		return $list;
+	}
+
+	public function get_members_count($key)
+	{
+		$response = $this->execute_command( "SCARD {$key}" );
+		if ( $this->get_error($response) )
+		{
+			return;
+		}
+
+		return (int)substr($response, 1);
+	}
+
 	# === Middle tier ===
 
 	/**
