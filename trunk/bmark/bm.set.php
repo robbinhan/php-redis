@@ -1,12 +1,7 @@
 <?
 
-require_once dirname(__FILE__) . '/../lib/redis.php';
-require_once dirname(__FILE__) . '/../lib/redis.pool.php';
-require_once dirname(__FILE__) . '/../lib/redis_set.peer.php';
-require_once dirname(__FILE__) . '/bench_mark.lib.php';
+require_once 'common.php';
 
-# Config
-redis_pool::add_servers( array('master' => array('127.0.0.1', 6379)) );
 class mock_set_peer extends redis_set_peer
 {}
 
@@ -14,10 +9,33 @@ class mock_set_peer extends redis_set_peer
 
 $p = new mock_set_peer();
 
-bench_mark::start();
+bench_mark::start('Setting 10000 members');
 
-$p->clear('some_set');
-$p->add('some_set', 1, 'Adding/removing');
-$p->add('some_set', 2);
+$p->clear('bm_set');
+for ( $i = 0; $i < 10000; $i ++ )
+{
+	$p->add('bm_set', md5($i));
+}
 
-echo bench_mark::get();
+bench_mark::stop();
+
+
+bench_mark::start('Checking random member 10000 times');
+
+for ( $i = 0; $i < 10000; $i ++ )
+{
+	$p->is_member('bm_set', md5($i));
+}
+
+bench_mark::stop();
+
+
+bench_mark::start('Removing 10000 members');
+
+$p->clear('bm_set');
+for ( $i = 0; $i < 10000; $i ++ )
+{
+	$p->remove('bm_set', md5($i));
+}
+
+bench_mark::stop();
